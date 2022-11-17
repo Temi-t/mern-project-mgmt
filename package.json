@@ -1,0 +1,32 @@
+{
+  "name": "mern-project-mgmt",
+  "version": "1.0.0",
+  "description": "Progect management for learning",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Temi-t/mern-project-mgmt.git"
+  },
+  "author": "Temi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Temi-t/mern-project-mgmt/issues"
+  },
+  "homepage": "https://github.com/Temi-t/mern-project-mgmt#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.8.0",
+    "mongoose": "^6.7.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
