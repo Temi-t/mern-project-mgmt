@@ -6,7 +6,7 @@ const {
   GraphQLSchema,
   GraphQLList,
 } = require("graphql");
-const { modelNames } = require("mongoose");
+//const { modelNames } = require("mongoose");
 
 //Project Type
 const ProjectType = new GraphQLObjectType({
@@ -18,6 +18,7 @@ const ProjectType = new GraphQLObjectType({
     status: { type: GraphQLString },
   }),
 });
+
 //Client Type
 const ClientType = new GraphQLObjectType({
   name: "Client",
