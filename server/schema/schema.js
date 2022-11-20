@@ -116,7 +116,28 @@ const mutation = new GraphQLObjectType({
     },
 
     //update client through mutations----------------------------------------------------------------
-    //updateClient: {},
+    updateClient: {
+      type: ClientType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        phone: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        return Client.findByIdAndUpdate(
+          args.id,
+          {
+            $set: {
+              name: args.name,
+              email: args.email,
+              phone: args.phone,
+            },
+          },
+          { new: true } //will create a new client if none is present
+        );
+      },
+    },
 
     //Add a project
     addProject: {
@@ -145,6 +166,48 @@ const mutation = new GraphQLObjectType({
           clientId: args.clientId,
         });
         return project.save();
+      },
+    },
+
+    //delete a project
+    deleteProject: {
+      type: ProjectType,
+      args: { id: { type: GraphQLNonNull(GraphQLID) } },
+      resolve(parent, args) {
+        return Project.findByIdAndRemove(args.id);
+      },
+    },
+
+    //update a project
+    updateProject: {
+      type: ProjectType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+        description: { type: GraphQLString },
+        status: {
+          type: new GraphQLEnumType({
+            name: "ProjectStatusUpdate",
+            values: {
+              new: { value: "Not Started" }, //stringify values like new if there's an issue
+              progress: { value: "In Progress" },
+              completed: { value: "Completed" },
+            },
+          }),
+        },
+      },
+      resolve(parent, args) {
+        return Project.findByIdAndUpdate(
+          args.id,
+          {
+            $set: {
+              name: args.name,
+              description: args.description,
+              status: args.status,
+            },
+          },
+          { new: true } //will create a new project if none is present
+        );
       },
     },
   },
