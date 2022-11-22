@@ -13,18 +13,25 @@ export default function AddClientsModal() {
     variables: { name, email, phone },
     //update cache for new client
     update(cache, { data: { addClient } }) {
-      const { clients } = cache.readQuery({ query: { GET_CLIENTS } });
+      const { clients } = cache.readQuery({ query: GET_CLIENTS });
 
       cache.writeQuery({
-        query: { GET_CLIENTS },
-        data: { clients: clients.concat([addClient]) },
+        query: GET_CLIENTS,
+        //data: { clients: clients.concat([addClient]) },
+        data: { clients: [...clients, addClient] },
       });
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name, email, phone);
+    if (name === "" || email === "" || phone === "")
+      return alert("Please fill in all fields");
+
+    addClient(name, email, phone);
+    setName("");
+    setEmail("");
+    setPhone("");
   };
 
   return (
