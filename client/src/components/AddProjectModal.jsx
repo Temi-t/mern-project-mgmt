@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ADD_PROJECT } from "../mutations/projectMutations";
 import { GET_PROJECTS } from "../queries/projectQueries";
 import { GET_CLIENTS } from "../queries/clientQueries";
-import Spinner from "./Spinner";
+//import Spinner from "./Spinner";
 
 export default function AddProjectModal() {
   const [name, setName] = useState("");
@@ -12,16 +12,12 @@ export default function AddProjectModal() {
   const [clientId, setClientId] = useState("");
   const [status, setStatus] = useState("new");
 
-  //Get clients for modal select
-  const { loading, error, data } = useQuery(GET_CLIENTS);
-
   const [addProject] = useMutation(ADD_PROJECT, {
-    variables: { name, description, status, clientId },
+    variables: { name, description, clientId, status },
     //update cache for New Project to display
     update(cache, { data: { addProject } }) {
       //set all projects from query in cache
       const { projects } = cache.readQuery({ query: GET_PROJECTS });
-
       //write to the cache
       cache.writeQuery({
         query: GET_PROJECTS,
@@ -30,20 +26,22 @@ export default function AddProjectModal() {
     },
   });
 
+  //Get clients for modal select
+  const { loading, error, data } = useQuery(GET_CLIENTS);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name === "" || description === "" || status === "")
       return alert("Please fill in all fields");
-
     //invoke addProject();
-    addProject(name, description, status, clientId);
-
+    addProject(name, description, clientId, status);
     setName("");
     setDescription("");
     setStatus("new");
+    setClientId("");
   };
 
-  if (loading) return <Spinner />;
+  if (loading) return null;
   if (error) return "Something went wrong while adding this project";
 
   return (
@@ -124,6 +122,9 @@ export default function AddProjectModal() {
                         value={clientId}
                         onChange={(e) => setClientId(e.target.value)}
                       >
+                        <option value="" defaultValue disabled hidden>
+                          Select client
+                        </option>
                         {data.clients.map((client) => (
                           <option key={client.id} value={client.id}>
                             {client.name}
