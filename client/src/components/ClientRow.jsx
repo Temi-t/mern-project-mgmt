@@ -2,14 +2,15 @@ import { FaTrash } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { DELETE_CLIENT } from "../mutations/clientMutations";
 import { GET_CLIENTS } from "../queries/clientQueries";
+import { GET_PROJECTS } from "../queries/projectQueries";
 
 export default function ClientRow({ client }) {
   const [deleteClient] = useMutation(DELETE_CLIENT, {
     variables: { id: client.id },
     //refetching can slow down the app compared to updating the cache without making a whole new request
-    //refetchQueries: [{ query: GET_CLIENTS }],
+    refetchQueries: [{ query: GET_CLIENTS }, { query: GET_PROJECTS }],
 
-    update(cache, { data: { deleteClient } }) {
+    /*update(cache, { data: { deleteClient } }) {
       //set data to response of deleteClient
       //get query from cache
       const { clients } = cache.readQuery({
@@ -21,7 +22,7 @@ export default function ClientRow({ client }) {
           clients: clients.filter((client) => client.id !== deleteClient.id),
         },
       });
-    },
+    },*/
   });
 
   return (
